@@ -60,7 +60,6 @@ const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
     );
   }
   const admin = await User.findOne({
-    where: { email },
   });
 
   if (!admin) {

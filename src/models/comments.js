@@ -1,10 +1,10 @@
 const { Model, DataTypes } = require('sequelize')
 const sequelize = require("../config/db.config"); // If MODELS.ADMIN is defined in a separate file
 const { MODELS } = require('../utils/constants');
-class Post extends Model {
+class Comment extends Model {
 }
 
-Post.init(
+Comment.init(
     {
         id: {
             autoIncrement: true,
@@ -12,7 +12,7 @@ Post.init(
             allowNull: false,
             primaryKey: true,
         },
-        projectId: {
+        postId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -28,11 +28,24 @@ Post.init(
                 key: "id",
             },
         },
+        Comment: {
+            type: DataTypes.STRING,
+            allowNull: false,
+
+        },
+        postImageId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: MODELS.PROJECTIMAGE,
+                key: "id",
+            },
+        }
     },
     {
         sequelize,
-        modelName: MODELS.Post,
+        modelName: MODELS.Comment,
     }
 );
 
-module.exports = Post;
+module.exports = Comment;

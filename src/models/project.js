@@ -27,7 +27,7 @@ Project.init(
             type: DataTypes.STRING(255),
 
         },
-        userId: {
+        clientId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

@@ -3,8 +3,10 @@ const Role = require("./role")
 const User = require("./users");
 const Project = require("./project");
 const ProjectMember = require("./projectmember");
-const ProjectImage = require("./projectImages");
+// const ProjectImage = require("./projectImages");
+const comments = require("./comments")
 const Post = require("./posts");
+const projectImages = require("./projectImages");
 
 ForgetPasswordToken.belongsTo(User, {
   onDelete: "CASCADE",
@@ -52,31 +54,53 @@ ProjectMember.belongsTo(User, {
   unique: true,
 });
 
-Project.hasMany(ProjectImage, {
+Project.hasMany(projectImages, {
   onDelete: "CASCADE",
   foreignKey: "projectId",
   unique: true,
 });
-ProjectImage.belongsTo(Project, {
-  onDelete: "CASCADE",
-  foreignKey: "projectId",
-  unique: true,
-});
-
-Project.hasMany(ProjectImage, {
-  onDelete: "CASCADE",
-  foreignKey: "projectId",
-  unique: true,
-});
-ProjectImage.belongsTo(Project, {
+projectImages.belongsTo(Project, {
   onDelete: "CASCADE",
   foreignKey: "projectId",
   unique: true,
 });
 
-User.hasMany(ProjectImage, {
-  foreignKey: "userId",
+projectImages.belongsTo(Post, {
+  foreignKey: "postId",
 });
-ProjectImage.belongsTo(User, {
-  foreignKey: "userId",
+
+Post.hasMany(projectImages, {
+  foreignKey: "postId",
+});
+
+User.hasMany(comments, {
+  foreignKey: "clientId",
+});
+
+comments.belongsTo(User, {
+  foreignKey: "clientId",
+});
+
+
+Post.hasMany(comments, {
+  foreignKey: "postId",
+});
+
+comments.belongsTo(Post, {
+  foreignKey: "postId",
+});
+
+
+projectImages.hasMany(comments, {
+  foreignKey: "postImageId",
+});
+
+comments.belongsTo(projectImages, {
+  foreignKey: "postImageId",
+});
+User.hasMany(Post, {
+  foreignKey: "clientId",
+});
+Post.belongsTo(User, {
+  foreignKey: "clientId",
 });
