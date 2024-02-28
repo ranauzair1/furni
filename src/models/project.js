@@ -22,10 +22,8 @@ Project.init(
         },
         startDate: {
             type: DataTypes.STRING(255),
-
         }, estimationTime: {
             type: DataTypes.STRING(255),
-
         },
         clientId: {
             type: DataTypes.INTEGER,

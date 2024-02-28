@@ -25,12 +25,9 @@ const addProject = catchAsync(async (req, res, next) => {
     estimationTime,
     clientId,
   });
-  const files = req.files.avatar;
-  console.log("i am here", req.files.avatar)
-  // Assuming req.files.avatar is the array of files
-  const numberOfFiles = files.length;
-  console.log("i am here", numberOfFiles)
 
+  const numberOfFiles = Object.entries(req.files).length;
+  console.log("i am here--->", numberOfFiles)
   if (numberOfFiles > 0) {
     const files = Array.isArray(req.files.avatar)
       ? req.files.avatar
@@ -118,7 +115,6 @@ const getAllworkerProjects = catchAsync(async (req, res, next) => {
   });
   return APIresponse(res, MESSAGES.USER_CREATED, managerProjects);
 });
-
 const getAllmangerprojects = catchAsync(async (req, res, next) => {
   const { managerIds } = req.query;
   const managerProjects = await ProjectMember.findAll({
@@ -144,7 +140,6 @@ const getAllmangerprojects = catchAsync(async (req, res, next) => {
 
   return APIresponse(res, MESSAGES.USER_CREATED, managerProjects);
 });
-
 const getAllvenderprojects = catchAsync(async (req, res, next) => {
   const { vendorIds } = req.query;
   const projectsVender = await ProjectMember.findAll({
@@ -179,14 +174,14 @@ const getAllclientprojects = catchAsync(async (req, res, next) => {
   });
   return APIresponse(res, "Success", clientprojects);
 });
-
 const creatPost = catchAsync(async (req, res, next) => {
-  const { projectId, clientId, } = req.body;
+  const { projectId, clientId, description } = req.body;
   const ipv4Address = ip.address();
 
   const post = await Post.create({
     projectId,
     clientId,
+    description
   });
   console.log("post", post.id, projectId)
   const postImage = await ProjectImage.create({
@@ -199,15 +194,14 @@ const creatPost = catchAsync(async (req, res, next) => {
     where: { postId: post.id, projectId },
 
   });
-  const files = req?.files?.avatar;
-  const numberOfFiles = files?.length;
+  const numberOfFiles = Object.entries(req.files).length;
   if (numberOfFiles > 0) {
     const files = Array.isArray(req.files.avatar)
       ? req.files.avatar
       : [req.files.avatar];
     if (files !== undefined) {
       console.log(__dirname)
-      const savePath = path.join(__dirname, "../uploads");
+      const savePath = path.join(__dirname, "../uploads/");
       for (const file of files) {
         const fileName = file.name;
         console.log();
@@ -230,11 +224,9 @@ const creatPost = catchAsync(async (req, res, next) => {
           postImages = null
         } else {
           console.log("i am heqresssssss1")
-
           const ProjectImages = await ProjectImage.create({
             imageUrl: filepath ?? null,
             projectId: projectId,
-
             postId: post.id,
           });
         }
@@ -283,7 +275,6 @@ const getUserAllPostComments = catchAsync(async (req, res, next) => {
   //     },
   //   }
   // });
-
   const post = await User.findAll({
     where: {
       id: clientId
@@ -299,10 +290,6 @@ const getUserAllPostComments = catchAsync(async (req, res, next) => {
 
     }
   });
-
-
-
-
   return APIresponse(res, "Success", post);
 });
 

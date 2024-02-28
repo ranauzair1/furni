@@ -12,6 +12,9 @@ Post.init(
             allowNull: false,
             primaryKey: true,
         },
+        description: {
+            type: DataTypes.STRING,
+        },
         projectId: {
             type: DataTypes.INTEGER,
             allowNull: false,
