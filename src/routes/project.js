@@ -1,6 +1,6 @@
 const { authJwt } = require("../middlewares/authJwt");
 
-const { addProject, asigningProject, getAllPostComments, getAllclientprojects, creatPost, getUserAllPostComments, getAllmangerprojects, addComments, getAllvenderprojects, getAllworkerProjects } =
+const { addProject, asigningProject, getAllPostComments, getAllclientprojects, creatPost, getUserAllPostComments, getAllmangerprojects, addComments, getAllvenderprojects, getAllworkerProjects, getAllProjectPosts } =
     require("../controllers").project;
 
 
@@ -15,4 +15,5 @@ module.exports = (router) => {
     router.route("/getAllclientprojects").get(getAllclientprojects);
     router.route("/getUserAllPostComments").get(getUserAllPostComments);
     router.route("/getAllPostComments").get(getAllPostComments);
+    router.route("/getAllProjectPosts").post(getAllProjectPosts);
 };

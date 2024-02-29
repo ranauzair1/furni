@@ -67,7 +67,6 @@ const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
   }
   const token = await User.generateUnique5DigitNumber();
   const currentDate = addMinutes(new Date(), 30);
-  console.log(admin)
   await ForgetPasswordToken.upsert(
     {
       token: token,
