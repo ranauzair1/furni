@@ -57,6 +57,9 @@ User.init(
             type: DataTypes.STRING(255),
             unique: true,
             allowNull: true,
+        }, fisrtTimeLogin: {
+            type: DataTypes.BOOLEAN,
+
         },
         password: {
             type: DataTypes.STRING(255),

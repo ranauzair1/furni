@@ -35,24 +35,35 @@ const adminLogin = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
   }
-  if (password === user.password) {
 
-    const jwtToken = jwt.sign(
-      user.get({ plain: true }),
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "1 day" }
-    );
-    return APIresponse(res, MESSAGES.LOGIN_SUCCESS_MESSAGE, {
-      user: user,
-      token: jwtToken,
-    });
+  if (user.fisrtTimeLogin) {
+    return next(new APIError("Please Reset Password and Than login Again", 400))
+  } else {
+    if (password === user.password) {
+      const jwtToken = jwt.sign(
+        user.get({ plain: true }),
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1 day" }
+      );
+
+
+      const user = await User.update({
+        fisrtTimeLogin:true
+          // where: { email },
+      });
+
+return APIresponse(res, MESSAGES.LOGIN_SUCCESS_MESSAGE, {
+  user: user,
+  token: jwtToken,
+});
+    }
   }
-  return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
+return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
 });
 
 const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
   const { email } = req.body;
-  console.log("email-----",email)
+  console.log("email-----", email)
   const emailValidation = emailSchema.validate(req.body);
 
   if (emailValidation.error) {

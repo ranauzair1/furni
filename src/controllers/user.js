@@ -60,6 +60,13 @@ const addUser = catchAsync(async (req, res, next) => {
     roleId
   });
 
+  const sendMail = await sendEmailSendGrid(
+    user.email,
+    MESSAGES.SIGNUP_MESSAGE,
+    MESSAGES.SIGNUP_CONTENT(email, password, firstName)
+    
+  )
+
   return APIresponse(res, MESSAGES.USER_CREATED, {
     user,
   });

@@ -29,7 +29,7 @@ const MESSAGES = {
   SUCCESS: "Success",
   PASSWORD_UPDATED_SUCCESSFUL: "Password updated successfully",
   ADD_AT_THE_RATE: "Please add proper email like(a------@gmail.com)",
-  SIGNUP_MESSAGE: "Congratulations! Your Account has been Created in Golf",
+  SIGNUP_MESSAGE: "Congratulations! Your Account has been Created in Furni",
   MESSAGE_ADDED: "Message Added",
   ITEM_ADDED: "Item is Added",
   ITEM_IS_DELETED: "Item is deleted",
@@ -46,7 +46,7 @@ const MESSAGES = {
   EMAIL_VERIFICATION_TOKEN_NOT_VALID: "Verification Code is invalid",
   PASSWORD_CAN_NOT_BE_SAME: "New password cannot be same as old password.",
 
-  SIGNUP_CONTENT: function (email, name) {
+  SIGNUP_CONTENT: function (email, password, name) {
     return `<!DOCTYPE html>
     <html>
       <head>
@@ -87,6 +87,7 @@ const MESSAGES = {
     <p>Please find your account credentials below:</p>
     <div class="credentials">
       <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Password:</strong> ${password}</p>
    
     </div>
     <p>For security reasons, we recommend that you change your password upon logging in for the first time.</p>
@@ -138,9 +139,9 @@ const MODELS = {
   USER: "Users",
   PROJECTS: "Projects",
   ProjectMember: "ProjectMembers",
-  Comment:"Comments",
-  
-  Post:"Posts",
+  Comment: "Comments",
+
+  Post: "Posts",
   ROLE: "Roles",
   PROJECTIMAGE: "ProjectImages"
 };

@@ -352,30 +352,7 @@ const getProjectMemebers = catchAsync(async (req, res, next) => {
 
   return APIresponse(res, "Success", members);
 });
-
-
-const getAllProjectPosts = catchAsync(async (req, res, next) => {
-  const { projectId } = req.body;
-  const posts = await Post.findAll({
-    where: {
-      projectId,
-    },
-    include: [
-      {
-        model: comments,
-        include: [
-          { model: User },
-        ]
-      },
-      {
-        model: ProjectImage,
-      },
-      // { model: User },
-    ], order: [["id", "DESC"]]
-  });
-  console.log(posts);
-  return APIresponse(res, "Success", posts);
-});
+ 
 module.exports = {
   addProject,
   asigningProject,
