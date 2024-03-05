@@ -52,6 +52,7 @@ const adminLogin = catchAsync(async (req, res, next) => {
 
 const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
   const { email } = req.body;
+  console.log("email-----",email)
   const emailValidation = emailSchema.validate(req.body);
 
   if (emailValidation.error) {
@@ -60,6 +61,7 @@ const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
     );
   }
   const admin = await User.findOne({
+    where: { email },
   });
 
   if (!admin) {

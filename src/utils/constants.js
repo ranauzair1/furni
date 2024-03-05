@@ -106,8 +106,7 @@ const MESSAGES = {
 
   EMAIL_CONTENT: function (email, token) {
     return `A password reset was requested for this email address ${email}.
-    If you requested this reset, please 
-    <a href="${process.env.FRONTEND_URL}/reset-password/${token}">Click here</a>`;
+    If you requested this reset, please ${token}`;
   },
 
   sendViaEmail: function (email, token) {

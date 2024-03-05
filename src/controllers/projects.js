@@ -310,6 +310,7 @@ const getAllPostComments = catchAsync(async (req, res, next) => {
 
 const getAllProjectPosts = catchAsync(async (req, res, next) => {
   const { projectId } = req.body;
+
   const posts = await Post.findAll({
     where: {
       projectId,
@@ -317,15 +318,39 @@ const getAllProjectPosts = catchAsync(async (req, res, next) => {
     include: [
       {
         model: comments,
+        include: [
+          {
+            model: User,
+          },
+        ],
       },
       {
         model: ProjectImage,
       },
       { model: User },
     ],
+    order: [["id", "DESC"]],
   });
-  console.log(posts);
+
   return APIresponse(res, "Success", posts);
+});
+
+const getProjectMemebers = catchAsync(async (req, res, next) => {
+  const { projectId } = req.body;
+
+  const members = await ProjectMember.findAll({
+    where: {
+      projectId,
+    },
+    include: [
+      {
+        model: User,
+      },
+    ],
+    order: [["id", "DESC"]],
+  });
+
+  return APIresponse(res, "Success", members);
 });
 
 module.exports = {
@@ -338,6 +363,7 @@ module.exports = {
   creatPost,
   addComments,
   getAllProjectPosts,
+  getProjectMemebers,
   getUserAllPostComments,
   getAllPostComments,
 };
