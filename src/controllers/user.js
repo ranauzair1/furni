@@ -26,9 +26,7 @@ const { Op } = require("sequelize");
 
 const addUser = catchAsync(async (req, res, next) => {
   const { email, firstName, lastName, password, contactNo, roleId } = req.body;
-  console.log(req.body)
   const createUserValidation = createUserSchema.validate(req.body);
-
   if (createUserValidation.error) {
     return next(
       new APIError(
@@ -37,7 +35,6 @@ const addUser = catchAsync(async (req, res, next) => {
       )
     );
   }
-
   const userExists = await User.findOne({
     where: { email: email },
   });
@@ -54,19 +51,16 @@ const addUser = catchAsync(async (req, res, next) => {
     email,
     firstName,
     lastName,
-    password: password,
+    password: await User.passwordHash(password),
     contactNo,
     userStatus: "true",
     roleId
   });
-
   const sendMail = await sendEmailSendGrid(
     user.email,
     MESSAGES.SIGNUP_MESSAGE,
     MESSAGES.SIGNUP_CONTENT(email, password, firstName)
-    
   )
-
   return APIresponse(res, MESSAGES.USER_CREATED, {
     user,
   });

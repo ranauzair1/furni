@@ -59,7 +59,10 @@ User.init(
             allowNull: true,
         }, fisrtTimeLogin: {
             type: DataTypes.BOOLEAN,
-
+            defaultValue: false
+        }, passwordChange: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true
         },
         password: {
             type: DataTypes.STRING(255),

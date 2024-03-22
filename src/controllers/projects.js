@@ -28,19 +28,15 @@ const addProject = catchAsync(async (req, res, next) => {
   });
 
   const numberOfFiles = Object.entries(req.files).length;
-  console.log("i am here--->", numberOfFiles);
   if (numberOfFiles > 0) {
     const files = Array.isArray(req.files.avatar)
       ? req.files.avatar
       : [req.files.avatar];
     if (files !== undefined) {
-      console.log(__dirname)
       const savePath = path.join(__dirname, "../uploads");
       for (const file of files) {
         const fileName = file.name;
-        console.log();
         await uploadFile(file, savePath, file.name);
-        console.log("===========>", project.id);
         const filepath = `http://${ipv4Address}:4000/uploads/` + fileName;
         const ProjectImages = await ProjectImage.create({
           imageUrl: filepath ?? null,
@@ -93,7 +89,6 @@ const asigningProject = catchAsync(async (req, res, next) => {
 });
 const getAllworkerProjects = catchAsync(async (req, res, next) => {
   const { workerIds } = req.query;
-  console.log("req.body==========>", workerIds);
   const managerProjects = await ProjectMember.findAll({
     where: {
       userId: workerIds,
@@ -184,12 +179,10 @@ const creatPost = catchAsync(async (req, res, next) => {
     clientId,
     description,
   });
-  console.log("post", post.id, projectId);
   const postImage = await ProjectImage.create({
     postId: post.id,
     projectId: projectId,
   });
-  console.log("postImage");
   let postImages = await ProjectImage.findOne({
     where: { postId: post.id, projectId },
   });
@@ -199,16 +192,12 @@ const creatPost = catchAsync(async (req, res, next) => {
       ? req.files.avatar
       : [req.files.avatar];
     if (files !== undefined) {
-      console.log(__dirname);
       const savePath = path.join(__dirname, "../uploads/");
       for (const file of files) {
         const fileName = file.name;
-        console.log();
         await uploadFile(file, savePath, file.name);
         const filepath = `http://${ipv4Address}:4000/uploads/` + fileName;
         if (postImages) {
-          console.log("i am here1");
-
           let ProjectImages = await ProjectImage.update(
             {
               imageUrl: filepath ?? null,
@@ -222,7 +211,6 @@ const creatPost = catchAsync(async (req, res, next) => {
           );
           postImages = null;
         } else {
-          console.log("i am heqresssssss1");
           const ProjectImages = await ProjectImage.create({
             imageUrl: filepath ?? null,
             projectId: projectId,
@@ -233,7 +221,6 @@ const creatPost = catchAsync(async (req, res, next) => {
     }
   }
 
-  console.log(post.id);
   const posts = await Post.findAll({
     include: {
       model: ProjectImage,
@@ -249,7 +236,6 @@ const creatPost = catchAsync(async (req, res, next) => {
 const addComments = catchAsync(async (req, res, next) => {
   const { postImageId, clientId, postId, Comment } = req.body;
 
-  console.log(postImageId, clientId, postId, Comment);
 
   const post = await comments.create({
     postImageId,
@@ -262,15 +248,7 @@ const addComments = catchAsync(async (req, res, next) => {
 });
 const getUserAllPostComments = catchAsync(async (req, res, next) => {
   const { postImageId, clientId, postId, Comment } = req.body;
-  // const post = await User.findAndCountAll({
-  //   include: {
-
-  //     model: comments,
-  //     where: {
-  //       postId
-  //     },
-  //   }
-  // });
+   
   const post = await User.findAll({
     where: {
       id: clientId,

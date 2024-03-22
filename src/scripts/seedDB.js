@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const createAdmin = async () => {
   const admin = [
   {
-    email: "admin@gmail.com",
+    email: "ranauzair044@gmail.com",
     password: "qwerty@1",
     roleId: 1,
     createdAt: new Date(),

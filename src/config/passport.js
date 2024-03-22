@@ -8,7 +8,6 @@ exports.getJwtStrategy = () => {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: "smart-key",
     }
-    console.log("i am here also")
     return new JwtStrategy(options, async (jwtPayload, done) => {
         const user = await User.findByPk(jwtPayload.id)
         if (!user)

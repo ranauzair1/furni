@@ -35,35 +35,43 @@ const adminLogin = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
   }
-
-  if (user.fisrtTimeLogin) {
+  if (user.fisrtTimeLogin && user.passwordChange) {
     return next(new APIError("Please Reset Password and Than login Again", 400))
   } else {
-    if (password === user.password) {
+    let validatePassword = await hashCompare(password, user.password);
+
+    if (validatePassword) {
       const jwtToken = jwt.sign(
         user.get({ plain: true }),
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1 day" }
       );
+      if (!user.fisrtTimeLogin && user.passwordChange) {
+        const user = await User.update(
+          {
+            fisrtTimeLogin: true,
+          },
+          {
+            where: {
+              email,
+            },
+            returning: true,
+          },
+        );
+      }
 
 
-      const user = await User.update({
-        fisrtTimeLogin:true
-          // where: { email },
+      return APIresponse(res, MESSAGES.LOGIN_SUCCESS_MESSAGE, {
+        user: user,
+        token: jwtToken,
       });
-
-return APIresponse(res, MESSAGES.LOGIN_SUCCESS_MESSAGE, {
-  user: user,
-  token: jwtToken,
-});
     }
   }
-return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
+  return next(new APIError(MESSAGES.CREDENTIALS_NOT_VALID, 400));
 });
 
 const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
   const { email } = req.body;
-  console.log("email-----", email)
   const emailValidation = emailSchema.validate(req.body);
 
   if (emailValidation.error) {
@@ -91,7 +99,6 @@ const forgetPasswordAdmin = catchAsync(async (req, res, next) => {
     // }
   );
 
-  console.log("email, token", email, token);
 
   const sendMail = await sendEmailSendGrid(
     admin.email,
@@ -123,7 +130,6 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
     },
   });
 
-  // console.log("isVerified", isVerified);
 
   if (!isVerified) {
     return next(
@@ -143,7 +149,6 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
       new APIError(MESSAGES.CREDENTIALS_NOT_VALID, status.BAD_REQUEST)
     );
   }
-  console.log(isExists.password)
 
   let matchPassword = await User.hashCompare(newPassword, isExists.password);
   if (matchPassword) {
@@ -152,7 +157,6 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
     );
   }
 
-  console.log("im here");
   //creates new token
   isVerified.set({
     expiresIn: addMinutes(new Date(), 60),
@@ -172,7 +176,22 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
     password: await User.passwordHash(newPassword),
   });
   await passwordUpdate.save();
+  if (isExists.fisrtTimeLogin && isExists.passwordChange) {
+    const user = await User.update(
+      {
+        fisrtTimeLogin: true,
+        passwordChange: false
+      },
+      {
+        where: {
+          email: isExists.email,
+        },
+        returning: true,
+      },
+    );
+    console.log(user)
 
+  }
   return APIresponse(res, MESSAGES.PASSWORD_UPDATED_SUCCESSFUL);
 });
 
