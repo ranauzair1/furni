@@ -7,14 +7,7 @@ const dbUtils = require("../utils/database");
 const bcrypt = require("bcrypt");
 const { sendEmailSendGrid } = require("../utils/email");
 require("../config/passport");
-const { uploadFile } = require("../utils/fileUpload");
-const jwt = require("jsonwebtoken");
-const path = require("path");
-const { pagination } = require("../utils/pagination");
-const { loginSchema } = require("../utils/schema/auth");
-const crypto = require("crypto");
-
-const ip = require("ip");
+ 
 
 const { User } = require("../models");
 

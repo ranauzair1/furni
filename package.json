@@ -17,10 +17,10 @@
     "sync:db": "node src/scripts/syncDB.js",
     "seed:db": "node src/scripts/seedDB.js",
     "seedRole:db": "node src/scripts/seedRole.js"
-    
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
+    "aws-sdk": "^2.1589.0",
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",

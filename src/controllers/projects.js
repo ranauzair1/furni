@@ -2,20 +2,11 @@ const status = require("http-status");
 const { MESSAGES } = require("../utils/constants");
 const catchAsync = require("../utils/catchAsync");
 const { APIresponse } = require("../utils/APIresponse");
-const APIError = require("../utils/APIError");
-const dbUtils = require("../utils/database");
-const { uploadFile } = require("../utils/fileUpload");
-const path = require("path");
-
-const { pagination } = require("../utils/pagination");
-
+const { uploadToS3 } = require("../utils/fileUpload");
 const ip = require("ip");
-const { Op } = require("sequelize");
 const { User, Project, ProjectMember, comments } = require("../models");
 const ProjectImage = require("../models/projectImages");
-const { project } = require(".");
 const Post = require("../models/posts");
-
 const addProject = catchAsync(async (req, res, next) => {
   const { title, descriptions, startDate, estimationTime, clientId } = req.body;
   const ipv4Address = ip.address();
@@ -33,13 +24,10 @@ const addProject = catchAsync(async (req, res, next) => {
       ? req.files.avatar
       : [req.files.avatar];
     if (files !== undefined) {
-      const savePath = path.join(__dirname, "../uploads");
       for (const file of files) {
-        const fileName = file.name;
-        await uploadFile(file, savePath, file.name);
-        const filepath = `http://${ipv4Address}:4000/uploads/` + fileName;
+        const url = await uploadToS3(file)
         const ProjectImages = await ProjectImage.create({
-          imageUrl: filepath ?? null,
+          imageUrl: url ?? null,
           projectId: project.id,
         });
       }
@@ -192,15 +180,12 @@ const creatPost = catchAsync(async (req, res, next) => {
       ? req.files.avatar
       : [req.files.avatar];
     if (files !== undefined) {
-      const savePath = path.join(__dirname, "../uploads/");
       for (const file of files) {
-        const fileName = file.name;
-        await uploadFile(file, savePath, file.name);
-        const filepath = `http://${ipv4Address}:4000/uploads/` + fileName;
+        let url = await uploadToS3(file)
         if (postImages) {
           let ProjectImages = await ProjectImage.update(
             {
-              imageUrl: filepath ?? null,
+              imageUrl: url ?? null,
               projectId: projectId,
             },
             {
@@ -212,7 +197,7 @@ const creatPost = catchAsync(async (req, res, next) => {
           postImages = null;
         } else {
           const ProjectImages = await ProjectImage.create({
-            imageUrl: filepath ?? null,
+            imageUrl: url ?? null,
             projectId: projectId,
             postId: post.id,
           });
@@ -248,7 +233,7 @@ const addComments = catchAsync(async (req, res, next) => {
 });
 const getUserAllPostComments = catchAsync(async (req, res, next) => {
   const { postImageId, clientId, postId, Comment } = req.body;
-   
+
   const post = await User.findAll({
     where: {
       id: clientId,
@@ -330,7 +315,7 @@ const getProjectMemebers = catchAsync(async (req, res, next) => {
 
   return APIresponse(res, "Success", members);
 });
- 
+
 module.exports = {
   addProject,
   asigningProject,

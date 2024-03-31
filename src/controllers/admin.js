@@ -3,27 +3,19 @@ const { MESSAGES } = require("../utils/constants");
 const catchAsync = require("../utils/catchAsync");
 const { APIresponse } = require("../utils/APIresponse");
 const APIError = require("../utils/APIError");
-const dbUtils = require("../utils/database");
 const bcrypt = require("bcrypt");
 const { sendEmailSendGrid } = require("../utils/email");
 require("../config/passport");
-const { uploadFile } = require("../utils/fileUpload");
 const jwt = require("jsonwebtoken");
-const path = require("path");
-const { pagination } = require("../utils/pagination");
 const { loginSchema } = require("../utils/schema/auth");
-
 const ip = require("ip");
 const ForgetPasswordToken = require("../models/forgetPasswordToken");
 const { emailSchema, passwordResetSchema } = require("../utils/schema/general");
 const { Op } = require("sequelize");
 const { User } = require("../models");
-
 const adminLogin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-
   const loginValidation = loginSchema.validate(req.body);
-
   if (loginValidation.error) {
     return next(
       new APIError(loginValidation.error.details[0].message, status.BAD_REQUEST)
@@ -39,7 +31,6 @@ const adminLogin = catchAsync(async (req, res, next) => {
     return next(new APIError("Please Reset Password and Than login Again", 400))
   } else {
     let validatePassword = await hashCompare(password, user.password);
-
     if (validatePassword) {
       const jwtToken = jwt.sign(
         user.get({ plain: true }),
@@ -59,8 +50,6 @@ const adminLogin = catchAsync(async (req, res, next) => {
           },
         );
       }
-
-
       return APIresponse(res, MESSAGES.LOGIN_SUCCESS_MESSAGE, {
         user: user,
         token: jwtToken,
