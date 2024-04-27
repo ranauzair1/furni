@@ -5,6 +5,17 @@ const s3 = new aws.S3({
   secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 });
 
+
+require('dotenv').config();
+
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: 'dfk7s7koj',
+  api_key: '322527421493417',
+  api_secret: '6HmTTvv28g4p24mDrW9G4rZ989E'
+});
+
 exports.uploadFile = async (file, path, filename) => {
   await file.mv(path + filename)
 }
@@ -12,7 +23,7 @@ exports.uploadFile = async (file, path, filename) => {
 exports.uploadToS3 = async (file) => {
   console.log("bucket key===========>", file);
   const uploadParam = {
-    Bucket: process.env.BUCKET_KEY,
+    Bucket: "furni-uploads",
     Key: `Furni -  ${file.name}`,
     Body: file.data,
     ContentType: file.mimetype,
@@ -39,3 +50,19 @@ exports.deleteObjectFromS3 = async (url) => {
   }
   return
 };
+
+exports.uploadToCloudinary = async (imageFile, options) => {
+
+
+  console.log(imageFile)
+  console.log(options)
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(imageFile, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}

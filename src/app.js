@@ -41,6 +41,10 @@ const connectWithDB = async () => {
 connectWithDB();
 const routes = require("./routes/");
 app.use("/api/v1/", routes(router));
+
+
+
+
 app.get("/test", (req, res) => {
   res.status(200).send("Welcome to backend");
 });

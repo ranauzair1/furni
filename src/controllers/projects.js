@@ -7,6 +7,8 @@ const ip = require("ip");
 const { User, Project, ProjectMember, comments } = require("../models");
 const ProjectImage = require("../models/projectImages");
 const Post = require("../models/posts");
+const { uploadFile, uploadToCloudinary } = require("../utils/fileUpload");
+
 const addProject = catchAsync(async (req, res, next) => {
   const { title, descriptions, startDate, estimationTime, clientId } = req.body;
   const ipv4Address = ip.address();
@@ -17,7 +19,7 @@ const addProject = catchAsync(async (req, res, next) => {
     estimationTime,
     clientId,
   });
-
+console.log("===",req.files)
   const numberOfFiles = Object.entries(req.files).length;
   if (numberOfFiles > 0) {
     const files = Array.isArray(req.files.avatar)
@@ -26,6 +28,12 @@ const addProject = catchAsync(async (req, res, next) => {
     if (files !== undefined) {
       for (const file of files) {
         const url = await uploadToS3(file)
+        console.log("======>file----->", file)
+
+        // const result = await uploadToCloudinary(file.tempFilePath, { public_id: file.originalname });
+
+        // console.log(result?.url)
+
         const ProjectImages = await ProjectImage.create({
           imageUrl: url ?? null,
           projectId: project.id,
