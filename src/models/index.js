@@ -3,7 +3,8 @@ const Role = require("./role")
 const Project = require("./project")
 const ProjectMember = require("./projectmember")
 const projectImages = require("./projectImages")
-const comments = require("./comments")
+const comments = require("./comments");
+const Gallery = require("./gallery");
 
 require("./associations");
 
@@ -13,5 +14,6 @@ module.exports = {
   Role,
   Project,
   projectImages,
-  comments
+  comments,
+  Gallery
 };

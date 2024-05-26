@@ -12,7 +12,8 @@ const ip = require("ip");
 const ForgetPasswordToken = require("../models/forgetPasswordToken");
 const { emailSchema, passwordResetSchema } = require("../utils/schema/general");
 const { Op } = require("sequelize");
-const { User } = require("../models");
+const { User, Gallery } = require("../models");
+const { uploadToS3 } = require("../utils/fileUpload");
 const adminLogin = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   const loginValidation = loginSchema.validate(req.body);
@@ -191,8 +192,127 @@ async function hashCompare(pass, dbpassword) {
   const unhash = bcrypt.compareSync(pass, dbpassword);
   return unhash;
 }
+
+const AddGallery = catchAsync(async (req, res, next) => {
+  const { title, descriptions, } = req.body;
+  const numberOfFiles = Object.entries(req.files).length;
+  if (numberOfFiles > 0) {
+    const files = Array.isArray(req.files.avatar) ? req.files.avatar : [req.files.avatar];
+    console.log(files)
+    if (files !== undefined) {
+      for (const file of files) {
+        console.log(file)
+        var galleryImage = await uploadToS3(req.files.file)
+        console.log("======>file----->", file, galleryImage)
+      }
+    }
+  }
+  const gallery = await Gallery.create({
+    title,
+    descriptions,
+    galleryImage
+  });
+  return APIresponse(res, "image uploaded successfully", {
+    gallery,
+  });
+});
+
+const getAllGallery = catchAsync(async (req, res, next) => {
+  const users = await Gallery.findAndCountAll({
+
+  });
+
+  return APIresponse(res, MESSAGES.SUCCESS, {
+    users,
+  });
+});
+
+
+const getGalleryImage = catchAsync(async (req, res, next) => {
+  const { id } = req.query
+  const users = await Gallery.findOne({
+    where: { id: id }
+  });
+
+  return APIresponse(res, MESSAGES.SUCCESS, {
+    users,
+  });
+});
+const deleteGallery = catchAsync(async (req, res, next) => {
+  const { id } = req.query
+  const user = await Gallery.destroy({
+    where: {
+      id,
+    },
+  });
+
+  return APIresponse(res, "Gallery Deleted", {
+    user,
+  });
+});
+const updateGallery = catchAsync(async (req, res, next) => {
+  const { title, descriptions, id } = req.body;
+  console.log(req.files)
+  if (req.files != null) {
+    const numberOfFiles = Object.entries(req.files).length;
+    if (numberOfFiles > 0) {
+      const files = Array.isArray(req.files.avatar) ? req.files.avatar : [req.files.avatar];
+      console.log(files)
+      if (files !== undefined) {
+        for (const file of files) {
+          console.log(file)
+          var galleryImage = await uploadToS3(file)
+          console.log("======>file----->", file, galleryImage)
+        }
+      }
+      const gallery = await Gallery.update(
+        {
+          title,
+          descriptions,
+          galleryImage
+        },
+        {
+          where: {
+            id,
+          },
+          returning: true,
+        }
+      );
+
+
+
+      return APIresponse(res, "Gallery Updated", {
+        gallery,
+      });
+    }
+  } else {
+    const gallery = await Gallery.update(
+      {
+        title,
+        descriptions,
+      },
+      {
+        where: {
+          id,
+        },
+        returning: true,
+      }
+    );
+
+    return APIresponse(res, "Gallery Updated", {
+      gallery,
+    });
+  }
+
+
+})
 module.exports = {
   adminLogin,
   forgetPasswordAdmin,
   resetPasswordAdmin,
+  AddGallery,
+  getAllGallery,
+  getGalleryImage,
+  deleteGallery,
+  updateGallery
 };

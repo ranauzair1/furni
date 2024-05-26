@@ -8,9 +8,12 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     host: DB_HOST,
     port: DB_PORT,
     logging: false,
-    // query:{
-    //     raw:true
-    // }
+    dialectOptions: {
+        ssl: {
+            require: true, // This will help you. But you will see nwe error
+            rejectUnauthorized: false // This line will fix new error
+        }
+    },
 
 })
 

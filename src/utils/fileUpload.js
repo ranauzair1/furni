@@ -21,6 +21,10 @@ exports.uploadFile = async (file, path, filename) => {
 }
 
 exports.uploadToS3 = async (file) => {
+  if (!file) {
+    throw new Error("File is undefined or null");
+  }
+
   console.log("bucket key===========>", file);
   const uploadParam = {
     Bucket: "furni-uploads",
@@ -32,6 +36,7 @@ exports.uploadToS3 = async (file) => {
   let result = await s3.upload(uploadParam).promise();
   return result.Location;
 };
+
 exports.deleteObjectFromS3 = async (url) => {
   const parsedUrl = new URL(url);
   const key = parsedUrl.pathname.substring(1);

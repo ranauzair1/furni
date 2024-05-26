@@ -101,6 +101,7 @@ const TABLES = {
 
 const MODELS = {
   ADMIN: "Admins",
+  GALLERY:"Gallerys",
   MANAGER: "Managers",
   FORGETPASSWORDTOKEN: "ForgetPasswordTokens",
   USER: "Users",

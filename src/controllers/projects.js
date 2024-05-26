@@ -3,15 +3,11 @@ const { MESSAGES } = require("../utils/constants");
 const catchAsync = require("../utils/catchAsync");
 const { APIresponse } = require("../utils/APIresponse");
 const { uploadToS3 } = require("../utils/fileUpload");
-const ip = require("ip");
 const { User, Project, ProjectMember, comments } = require("../models");
 const ProjectImage = require("../models/projectImages");
 const Post = require("../models/posts");
-const { uploadFile, uploadToCloudinary } = require("../utils/fileUpload");
-
 const addProject = catchAsync(async (req, res, next) => {
   const { title, descriptions, startDate, estimationTime, clientId } = req.body;
-  const ipv4Address = ip.address();
   let project = await Project.create({
     title,
     descriptions,
@@ -168,7 +164,6 @@ const getAllclientprojects = catchAsync(async (req, res, next) => {
 });
 const creatPost = catchAsync(async (req, res, next) => {
   const { projectId, clientId, description } = req.body;
-  const ipv4Address = ip.address();
 
   const post = await Post.create({
     projectId,

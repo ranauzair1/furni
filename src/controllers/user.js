@@ -7,16 +7,12 @@ const dbUtils = require("../utils/database");
 const bcrypt = require("bcrypt");
 const { sendEmailSendGrid } = require("../utils/email");
 require("../config/passport");
- 
+
 
 const { User } = require("../models");
-
 const { createUserSchema } = require("../utils/schema/user");
-
 const { idSchema } = require("../utils/schema/general");
-
 const { Op } = require("sequelize");
-
 const addUser = catchAsync(async (req, res, next) => {
   const { email, firstName, lastName, password, contactNo, roleId } = req.body;
   const createUserValidation = createUserSchema.validate(req.body);

@@ -8,7 +8,11 @@ const { addUser, getAllUsers, updateUser, deleteUser, getAllMangers,
   require("../controllers").user;
 const { adminLogin,
   forgetPasswordAdmin,
-  resetPasswordAdmin, } =
+  resetPasswordAdmin, AddGallery,
+  getAllGallery,
+  getGalleryImage,
+  deleteGallery,
+  updateGallery } =
   require("../controllers").admin;
 
 module.exports = (router) => {
@@ -20,13 +24,14 @@ module.exports = (router) => {
   router.route("/admin/updateUser/:id").put(authJwt, updateUser);
   router.route("/admin/deleteUser/:id").delete(authJwt, deleteUser);
   router.route("/admin/singleUser/:id").get(authJwt, getSingleUser);
-
-
-
-
   router.route("/admin/getAllVendors").get(authJwt, getAllVendors);
   router.route("/admin/getAllMangers").get(authJwt, getAllMangers);
   router.route("/admin/getAllClient").get(authJwt, getAllClient);
   router.route("/admin/getAllWorker").get(authJwt, getAllWorker);
+  router.route("/admin/AddGallery").post(authJwt, AddGallery);
+  router.route("/admin/getAllGallery").get(getAllGallery);
+  router.route("/admin/getGalleryImages").get(authJwt, getGalleryImage);
+  router.route("/admin/deleteGallery").delete(authJwt, deleteGallery);
+  router.route("/admin/updateGallery").put(authJwt, updateGallery);
 
 };
