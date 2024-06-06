@@ -1,3 +1,4 @@
+const { getAllprojects } = require("../controllers/projects");
 const { authJwt } = require("../middlewares/authJwt");
 
 const { addProject, asigningProject, getAllPostComments, getAllclientprojects, creatPost, getUserAllPostComments, getAllmangerprojects, addComments, getAllvenderprojects, getAllworkerProjects, getAllProjectPosts, getProjectMemebers } =
@@ -6,6 +7,7 @@ const { addProject, asigningProject, getAllPostComments, getAllclientprojects, c
 
 module.exports = (router) => {
     router.route("/addProject").post(addProject);
+    router.route("/getAllprojects").get(getAllprojects);
     router.route("/asigningProject").post(asigningProject);
     router.route("/createPost").post(creatPost);
     router.route("/addComments").post(addComments);

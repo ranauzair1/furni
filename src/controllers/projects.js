@@ -15,7 +15,7 @@ const addProject = catchAsync(async (req, res, next) => {
     estimationTime,
     clientId,
   });
-console.log("===",req.files)
+  console.log("===", req.files)
   const numberOfFiles = Object.entries(req.files).length;
   if (numberOfFiles > 0) {
     const files = Array.isArray(req.files.avatar)
@@ -152,6 +152,12 @@ const getAllvenderprojects = catchAsync(async (req, res, next) => {
   });
 
   return APIresponse(res, MESSAGES.USER_CREATED, projectsVender);
+});
+const getAllprojects = catchAsync(async (req, res, next) => {
+  const projectsVender = await Project.findAndCountAll({
+  });
+
+  return APIresponse(res, "Success", projectsVender);
 });
 const getAllclientprojects = catchAsync(async (req, res, next) => {
   const { clientIds } = req.query;
@@ -329,6 +335,7 @@ module.exports = {
   creatPost,
   addComments,
   getAllProjectPosts,
+  getAllprojects,
   getProjectMemebers,
   getUserAllPostComments,
   getAllPostComments,
