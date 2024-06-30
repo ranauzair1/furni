@@ -9,7 +9,7 @@ const { sendEmailSendGrid } = require("../utils/email");
 require("../config/passport");
 
 
-const { User } = require("../models");
+const { User, Project } = require("../models");
 const { createUserSchema } = require("../utils/schema/user");
 const { idSchema } = require("../utils/schema/general");
 const { Op } = require("sequelize");
@@ -194,6 +194,42 @@ const getAllWorker = catchAsync(async (req, res, next) => {
     users,
   });
 });
+
+const dashboardData = catchAsync(async (req, res, next) => {
+  const manger = await User.findAndCountAll({
+    where: {
+      roleId: 2
+    },
+  });
+  console.log(manger.count)
+  const vendor = await User.findAndCountAll({
+    where: {
+      roleId: 3
+    },
+  });
+
+  const client = await User.findAndCountAll({
+    where: {
+      roleId: 4
+    },
+  });
+  const worker = await User.findAndCountAll({
+    where: {
+      roleId: 5
+    },
+  });
+  const project = await Project.findAndCountAll({
+
+  });
+
+  return APIresponse(res, MESSAGES.SUCCESS, {
+    manger: manger.count,
+    vendor: vendor.count,
+    client: client.count,
+    worker: worker.count,
+    project: project.count
+  });
+});
 module.exports = {
   addUser,
   getAllUsers,
@@ -204,4 +240,5 @@ module.exports = {
   getAllVendors,
   getAllClient,
   getAllWorker,
+  dashboardData
 };

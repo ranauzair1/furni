@@ -66,6 +66,7 @@ projectImages.belongsTo(Project, {
 });
 
 projectImages.belongsTo(Post, {
+  
   foreignKey: "postId",
 });
 

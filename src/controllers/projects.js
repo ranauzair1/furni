@@ -54,6 +54,24 @@ const addProject = catchAsync(async (req, res, next) => {
     projects,
   });
 });
+const deleteProject = catchAsync(async (req, res, next) => {
+  const { projectId } = req.query;
+  await Post.destroy({
+    where: {
+      projectId: projectId
+    }
+  });
+  let project = await Project.destroy({
+    where: {
+      id: projectId
+    }
+  });
+
+  return APIresponse(res, "Project deleted!", {
+    project
+  });
+});
+
 const asigningProject = catchAsync(async (req, res, next) => {
   const { clientIds, vendorIds, managerIds, workerIds, projectId } = req.body;
   const users = [
@@ -339,4 +357,5 @@ module.exports = {
   getProjectMemebers,
   getUserAllPostComments,
   getAllPostComments,
+  deleteProject
 };
