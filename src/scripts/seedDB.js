@@ -5,13 +5,13 @@ const createAdmin = async () => {
   const admin = [
     {
       email: "ranauzair044@gmail.com",
-      password: bcrypt.hashSync("Password@1", 8),
-    roleId: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
+      password: "Password@1",
+      roleId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
   ];
-await User.bulkCreate(admin);
+  await User.bulkCreate(admin);
 };
 
 

@@ -35,6 +35,6 @@ module.exports = (router) => {
   router.route("/admin/deleteGallery").delete(authJwt, deleteGallery);
   router.route("/admin/updateGallery").put(authJwt, updateGallery);
   router.route("/admin/dashboardData").get(authJwt, dashboardData);
-  router.route("/admin/deleteUser").delete(authJwt, deleteUser);
+  router.route("/admin/deleteUser").delete( deleteUser);
 
 };

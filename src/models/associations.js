@@ -66,42 +66,61 @@ projectImages.belongsTo(Project, {
 });
 
 projectImages.belongsTo(Post, {
-  
+  onDelete: "CASCADE",
+
   foreignKey: "postId",
 });
 
 Post.hasMany(projectImages, {
   foreignKey: "postId",
+  onDelete: "CASCADE",
+
 });
 
 User.hasMany(comments, {
   foreignKey: "clientId",
+  onDelete: "CASCADE",
+
 });
 
 comments.belongsTo(User, {
   foreignKey: "clientId",
+  onDelete: "CASCADE",
+
 });
 
 
 Post.hasMany(comments, {
   foreignKey: "postId",
+  onDelete: "CASCADE",
+
 });
 
 comments.belongsTo(Post, {
   foreignKey: "postId",
+  onDelete: "CASCADE",
+
 });
 
 
 projectImages.hasMany(comments, {
   foreignKey: "postImageId",
+  onDelete: "CASCADE",
+
 });
 
 comments.belongsTo(projectImages, {
   foreignKey: "postImageId",
+  onDelete: "CASCADE",
+
 });
 User.hasMany(Post, {
   foreignKey: "clientId",
+  onDelete: "CASCADE",
+
 });
 Post.belongsTo(User, {
   foreignKey: "clientId",
+  onDelete: "CASCADE",
+
 });

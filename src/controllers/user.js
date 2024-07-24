@@ -107,15 +107,15 @@ const updateUser = catchAsync(async (req, res, next) => {
 });
 
 const deleteUser = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.query;
+console.log(id)
+  // const idValidation = idSchema.validate(req.params);
 
-  const idValidation = idSchema.validate(req.params);
-
-  if (idValidation.error) {
-    return next(
-      new APIError(idValidation.error.details[0].message, status.BAD_REQUEST)
-    );
-  }
+  // if (idValidation.error) {
+  //   return next(
+  //     new APIError(idValidation.error.details[0].message, status.BAD_REQUEST)
+  //   );
+  // }
 
   const userExists = await User.findOne({
     where: { id },

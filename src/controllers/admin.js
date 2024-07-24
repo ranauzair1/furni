@@ -253,6 +253,7 @@ const deleteGallery = catchAsync(async (req, res, next) => {
 
 const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.query
+  console.log("i ma herw")
   const user = await User.destroy({
     where: {
       id,
