@@ -163,7 +163,7 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
   });
 
   passwordUpdate.set({
-    password: await User.passwordHash(newPassword),
+    password: newPassword
   });
   await passwordUpdate.save();
   if (isExists.fisrtTimeLogin && isExists.passwordChange) {
