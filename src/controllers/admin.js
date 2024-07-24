@@ -32,7 +32,7 @@ const adminLogin = catchAsync(async (req, res, next) => {
     return next(new APIError("Please Reset Password and Than login Again", 400))
   } else {
     let validatePassword = await hashCompare(password, user.password);
-    if (validatePassword) {
+    if (password === user.password) {
       const jwtToken = jwt.sign(
         user.get({ plain: true }),
         process.env.JWT_SECRET_KEY,
@@ -141,7 +141,7 @@ const resetPasswordAdmin = catchAsync(async (req, res, next) => {
   }
 
   let matchPassword = await User.hashCompare(newPassword, isExists.password);
-  if (matchPassword) {
+  if (newPassword === isExists.password) {
     return next(
       new APIError(MESSAGES.PASSWORD_CAN_NOT_BE_SAME, status.BAD_REQUEST)
     );
@@ -250,6 +250,18 @@ const deleteGallery = catchAsync(async (req, res, next) => {
     user,
   });
 });
+
+const deleteUser = catchAsync(async (req, res, next) => {
+  const { id } = req.query
+  const user = await User.destroy({
+    where: {
+      id,
+    },
+  });
+  return APIresponse(res, "User Deleted", {
+    user,
+  });
+});
 const updateGallery = catchAsync(async (req, res, next) => {
   const { title, descriptions, id } = req.body;
   console.log(req.files)
@@ -314,5 +326,6 @@ module.exports = {
   getAllGallery,
   getGalleryImage,
   deleteGallery,
-  updateGallery
+  updateGallery,
+  deleteUser
 };

@@ -40,7 +40,7 @@ const addUser = catchAsync(async (req, res, next) => {
     email,
     firstName,
     lastName,
-    password: await User.passwordHash(password),
+    password: password,
     contactNo,
     userStatus: "true",
     roleId

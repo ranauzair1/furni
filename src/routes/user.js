@@ -13,7 +13,7 @@ const { adminLogin,
   getAllGallery,
   getGalleryImage,
   deleteGallery,
-  updateGallery } =
+  updateGallery, } =
   require("../controllers").admin;
 
 module.exports = (router) => {
@@ -35,5 +35,6 @@ module.exports = (router) => {
   router.route("/admin/deleteGallery").delete(authJwt, deleteGallery);
   router.route("/admin/updateGallery").put(authJwt, updateGallery);
   router.route("/admin/dashboardData").get(authJwt, dashboardData);
+  router.route("/admin/deleteUser").delete(authJwt, deleteUser);
 
 };
